@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-
+{% block pagetitle %}
+<h1>Beer Meh</h1>
+{% endblock %}
 {% block content %}
 <style type="text/css">
 body{
-	background:whitesmoke;
+	background: whitesmoke;
+	padding: 0;
 }
 .navbar {
 	display: none;
@@ -11,6 +14,23 @@ body{
 h1 {
 	width:100%;
 	text-align: center;
+	text-transform: uppercase;
+	font-size:100px;
+	font-weight: 700;
+	text-shadow:-1px 1px 0px #FA418B, 
+				-2px 2px 0px #FA418B,
+				-3px 3px 0px #FA418B,
+				-4px 4px 0px #FA418B,
+				-5px 5px 0px #FA418B,
+				-6px 6px 0px #FA418B,
+				-7px 7px 0px #FA418B,
+				-8px 8px 0px #FA418B,
+				-9px 9px 0px #FA418B,
+				-10px 10px 0px #FA418B,
+				-11px 11px 0px #FA418B,
+				-12px 12px 0px #FA418B;
+	padding:0 0 30px 0;
+
 }
 h2, a{
 	color: #FA418B;
@@ -81,7 +101,7 @@ h2, a{
 
 <span class="csrf" style="display:none">{% csrf_token %}</span>
 
-<h1>Beeeeer Meeee</h1>
+
 <table class="users"></table>
 
 
