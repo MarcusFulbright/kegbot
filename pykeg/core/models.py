@@ -1170,3 +1170,6 @@ class PourPicture(models.Model):
     else:
       return ''
 
+class current_user(models.Model):
+    username = models.CharField(max_length=30)
+    expire_time = models.DateTimeField(blank=True, null=True)
