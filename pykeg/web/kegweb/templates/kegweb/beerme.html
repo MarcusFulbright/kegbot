@@ -8,8 +8,57 @@ body{
 	background: whitesmoke;
 	padding: 0;
 }
+/**, *:after, *:before {
+	box-sizing: border-box;
+}*/
 .navbar {
 	display: none;
+}
+.beer-me-asshole{
+	background:#FA418B;
+	border: 0;
+	border-radius: 0;
+	text-shadow: 0px 0px 0px transparent;
+	height:100%;
+	color:white;
+	font-weight:bold;
+	font-size:26px;
+	position:relative;
+	top: -15px;
+	left: 15px;
+	/*margin:-15px -15px 0 0;*/
+	transition: all 200ms;
+	padding: 15px;
+	box-shadow:-1px 1px 0px black, 
+				-2px 2px 0px black,
+				-3px 3px 0px black,
+				-4px 4px 0px black,
+				-5px 5px 0px black,
+				-6px 6px 0px black,
+				-7px 7px 0px black,
+				-8px 8px 0px black,
+				-9px 9px 0px black,
+				-10px 10px 0px black,
+				-11px 11px 0px black,
+				-12px 12px 0px black,
+				-13px 13px 0px black,
+				-14px 14px 0px black;
+}
+.beer-me-asshole:hover {
+	position:relative;
+	top: -10px;
+	right: -10px;
+	/*margin:-5px -5px 0 0;*/
+	box-shadow:-1px 1px 0px black, 
+				-2px 2px 0px black,
+				-3px 3px 0px black,
+				-4px 4px 0px black,
+				-5px 5px 0px black,
+				-6px 6px 0px black,
+				-7px 7px 0px black,
+				-8px 8px 0px black,
+				-9px 9px 0px black,
+				-10px 10px 0px black;
 }
 h1 {
 	width:100%;
@@ -65,6 +114,7 @@ div#content {
 h3 a{
 	color: #FA418B;
 	text-transform: capitalize;
+	font-size:26px;
 }
 table {
 	margin-left: 0 auto;
@@ -99,13 +149,41 @@ table tr td{
 		});
 		var handleUsers = function (data) {
 			data.users = data.objects;
-			$('.users').html( Mustache.to_html( usertemplate, data ) )
+			drinksArray = [];
+			$.each( data.users, function(i){
+				console.log(i, this.username)
+				var t = this;
+				drinksArray[i] = $.ajax({
+						'url': url + '/users/' + t.username + '/drinks',
+						// 'data': data,
+						'headers': {'X-CSRFToken': csrfmiddlewaretoken},
+						'type': 'GET'
+					});
+			});
+
+			var moarUserData = function() {
+				
+				$.each( arguments, function (i) {
+					data.users[i].drinks = this[0].objects;
+					data.users[i].volume_ml = 0;
+					$.each( this[0].objects, function() {
+						console.log(this.volume_ml);
+						data.users[i].volume_ml += parseFloat(this.volume_ml.toFixed(1));
+					});
+				});
+				console.log(data)
+				$('.users').html( Mustache.to_html( usertemplate, data ) )
+			}
+
+			$.when.apply($, drinksArray ).then( moarUserData );
+
+			
 			$('.beer-me-asshole').on('click', function(e) {
 				e.preventDefault();
 				var userUrl = $(this).attr('href');
 				var data = postKey;
 
-				data.expires_at = Date.now();
+				// data.expires_time = Date.now() + 5000000;
 
 				data.username = $(this).data('username');
 
@@ -121,20 +199,29 @@ table tr td{
 			});
 
 		}
+		
+		
 		$.when( users ).then( handleUsers );
-
+		
 	});
 </script>
 {% verbatim myblock %}
 	<script id="usertemplate" type="text/mustache">
+		<thead>
+			<th align="left"><h2>Drinkers</h2></th>
+			<th><h2>Drinks</h2></th>
+			<th><h2>Volume</h2></th>
+			<th></th>
+		</thead>
 		{{#users}}
 			<tr>
-				<td>
+				<td align="left">
 					<h3><a href="{{ url }}">{{ username }}</a></h3>
 				</td>
-
+				<td align="center"><h3>{{ drinks.length }}</h3></td>
+				<td align="center"><h3>~{{ volume_ml }}mL</h3></td>
 				<td align="right">
-					<a class="btn beer-me-asshole btn-alert" data-username="{{ username }}" href="{{ url }}">BEER ME ASSHOLE</a>
+					<a class="btn beer-me-asshole btn-alert" data-username="{{ username }}" href="{{ url }}">Beer Meh!</a>
 				</td>
 			</tr>
 		{{/users}}
@@ -143,7 +230,6 @@ table tr td{
 
 <span class="csrf" style="display:none">{% csrf_token %}</span>
 
-<h2>Drinkers</h2>
 <table class="users" align="center"></table>
 
 
