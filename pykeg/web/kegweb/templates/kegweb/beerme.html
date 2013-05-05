@@ -1,7 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<style type="text/css">
+body{
+	background:whitesmoke;
+}
+.navbar {
+	display: none;
+}
+h1 {
+	width:100%;
+	text-align: center;
+}
+h2, a{
+	color: #FA418B;
+}
+</style>
 <script type="text/javascript">
 	$(function(){
 
@@ -29,7 +43,7 @@
 				var userUrl = $(this).attr('href');
 				var data = postKey;
 
-				data.time = Date.now();
+				data.expires_at = Date.now();
 
 				data.username = $(this).data('username');
 				data.csrfmiddlewaretoken = $('.csrf input').val();
