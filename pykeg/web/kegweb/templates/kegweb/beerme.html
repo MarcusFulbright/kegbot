@@ -14,8 +14,8 @@ body{
 h1 {
 	width:100%;
 	text-align: center;
-	text-transform: uppercase;
-	font-size:100px;
+	text-transform: capitalize;
+	font-size:130px;
 	font-weight: 700;
 	text-shadow:-1px 1px 0px #FA418B, 
 				-2px 2px 0px #FA418B,
@@ -28,12 +28,54 @@ h1 {
 				-9px 9px 0px #FA418B,
 				-10px 10px 0px #FA418B,
 				-11px 11px 0px #FA418B,
-				-12px 12px 0px #FA418B;
-	padding:0 0 30px 0;
+				-12px 12px 0px #FA418B,
+				-13px 13px 0px #FA418B,
+				-14px 14px 0px #FA418B;
+	padding:0 0 40px 0;
 
 }
-h2, a{
+div#content {
+		border-radius: 0px;
+		box-shadow:-1px 1px 0px #D4D4D4,
+				-2px 2px 0px #D4D4D4,
+				-3px 3px 0px #D4D4D4,
+				-4px 4px 0px #D4D4D4,
+				-5px 5px 0px #D4D4D4,
+				-6px 6px 0px #D4D4D4,
+				-7px 7px 0px #D4D4D4,
+				-8px 8px 0px #D4D4D4,
+				-9px 9px 0px #D4D4D4,
+				-10px 10px 0px #D4D4D4,
+				-11px 11px 0px #D4D4D4,
+				-12px 12px 0px #D4D4D4,
+				-13px 13px 0px #D4D4D4,
+				-14px 14px 0px #D4D4D4,
+				-15px 14px 0px #D4D4D4,
+				-16px 16px 0px #D4D4D4,
+				-17px 17px 0px #D4D4D4,
+				-18px 18px 0px #D4D4D4,
+				-19px 19px 0px #D4D4D4,
+				-20px 20px 0px #D4D4D4,
+				-21px 21px 0px #D4D4D4,
+				-22px 22px 0px #D4D4D4,
+				-23px 23px 0px #D4D4D4,
+				-24px 24px 0px #D4D4D4,
+				-25px 25px 0px #D4D4D4;
+}
+h3 a{
 	color: #FA418B;
+	text-transform: capitalize;
+}
+table {
+	margin-left: 0 auto;
+	width:100%;
+}
+table tr:nth-child(odd) td{
+	background-color: whitesmoke;
+
+}
+table tr td{
+		padding:30px;
 }
 </style>
 <script type="text/javascript">
@@ -43,7 +85,7 @@ h2, a{
 		var urlKey = "?api_key=" + api_key;
 		var postKey = { 'api_key': api_key };
 		var url = '/api';
-		postKey.csrfmiddlewaretoken = $('.csrf input').val();
+		var csrfmiddlewaretoken = $('.csrf input').val();
 		var usertemplate = $('#usertemplate').html()
 		// var usertemplate = $('#usertemplate').html()
 
@@ -66,11 +108,11 @@ h2, a{
 				data.expires_at = Date.now();
 
 				data.username = $(this).data('username');
-				data.csrfmiddlewaretoken = $('.csrf input').val();
 
 					setCurrentUser = $.ajax({
 						'url': url + '/current_user/',
 						'data': data,
+						'headers': {'X-CSRFToken': csrfmiddlewaretoken},
 						'type': 'POST',
 						success: function(data) {
 							console.log('data', data)
@@ -88,7 +130,7 @@ h2, a{
 		{{#users}}
 			<tr>
 				<td>
-					<h2><a href="{{ url }}">{{ username }}</a></h2>
+					<h3><a href="{{ url }}">{{ username }}</a></h3>
 				</td>
 
 				<td align="right">
@@ -101,8 +143,8 @@ h2, a{
 
 <span class="csrf" style="display:none">{% csrf_token %}</span>
 
-
-<table class="users"></table>
+<h2>Drinkers</h2>
+<table class="users" align="center"></table>
 
 
 {% endblock %}
