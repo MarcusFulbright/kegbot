@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load kegweblib %}
+
 {% block content %}
 
 <script type="text/javascript">
@@ -28,77 +28,28 @@
 				e.preventDefault();
 				var userUrl = $(this).attr('href');
 				var data = postKey;
-				data.id = 'mydrink';
-				data.ticks = 5;
-				data.volume_ml = 99.99;
-				data.session_id = '';
-				data.pour_time = Date.now();
-				craptime = Date.now();
-				data.duration = 5;
-				data.status = 'this is the drink status';
+
+				data.time = Date.now();
+
 				data.username = $(this).data('username');
-				console.log('data', data)
 
-				var pourFinished = false;
-				var findPour = setInterval(function() {
-					isThereAPour = $.ajax({
-						'url': url + '/drinks',
+					setCurrentUser = $.ajax({
+						'url': url + '/current_user/',
 						'data': postKey,
-						'type': 'GET',
-						success: function(drink_data) {
-
-							var time = new Date(drink_data.objects[0].time)
-							console.log('last drink time-------', time.getTime())
-							console.log('pushed the button time', craptime)
-							if( parseInt(time.getTime()) > parseInt(data.pour_time) ){
-								// var drinkPost = $.ajax({
-								// 	'url': url + '/taps/whatever',
-								// 	'data': data,
-								// 	'type': 'POST',
-								// 	success: function() {
-								// 		alert('NEW DRINK SON')
-								clearInterval(findPour);
-
-								// 	}
-								// });
-								alert('you finally took that drink jeeze');
-
-							}
+						'type': 'POST',
+						success: function(data) {
+							console.log('data', data)
 						}
 					});
-				}, 1000);
 			});
-			$('.new-fake-drink').on( 'click', function(e) {
-				e.preventDefault();
-				var userUrl = $(this).attr('href');
-				var data = postKey;
-				data.id = 'mydrink';
-				data.ticks = 5;
-				data.volume_ml = 99.99;
-				data.session_id = '';
-				data.pour_time = Date.now();
-				data.duration = 5;
-				data.status = 'this is the drink status';
-				data.username = $(this).data('username');
-				console.log('data', data)
 
-				var drinkPost = $.ajax({
-					'url': url + '/taps/whatever',
-					'data': data,
-					'type': 'POST',
-					success: function() {
-						console.log('NEW DRINK SON')
-					}
-				});
-
-			});
 		}
 		$.when( users ).then( handleUsers );
 
 	});
 </script>
 {% verbatim myblock %}
-	<script id="usertemplate" >
+	<script id="usertemplate" type="text/mustache">
 		{{#users}}
 			<tr>
 				<td>
@@ -108,15 +59,12 @@
 				<td align="right">
 					<a class="btn beer-me-asshole btn-alert" data-username="{{ username }}" href="{{ url }}">BEER ME ASSHOLE</a>
 				</td>
-				<td align="right">
-					<a class="btn new-fake-drink btn-primary" data-username="{{ username }}" href="{{ url }}">NEW FAKE DRINK</a>
-				</td>
 			</tr>
 		{{/users}}
 	</script>
 {% endverbatim myblock %}
 
-<span class="csrf" style="display:none">{% csrf_token %}</span>
+<!-- <span class="csrf" style="display:none">{% csrf_token %}</span> -->
 
 <h1>Beeeeer Meeee</h1>
 <table class="users"></table>
