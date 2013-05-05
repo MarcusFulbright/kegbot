@@ -83,8 +83,13 @@ h1 {
 	padding:0 0 40px 0;
 
 }
-div#content {
+.drinkers, .taps{
+		width:100%;
+		padding:20px;
+		background-color: white;
 		border-radius: 0px;
+		margin-bottom:100px;
+		border:0;
 		box-shadow:-1px 1px 0px #D4D4D4,
 				-2px 2px 0px #D4D4D4,
 				-3px 3px 0px #D4D4D4,
@@ -111,6 +116,17 @@ div#content {
 				-24px 24px 0px #D4D4D4,
 				-25px 25px 0px #D4D4D4;
 }
+.drinkers:after, .taps:after{
+	content: '';
+	display:table;
+	clear:both;
+}
+div#content{
+	background-color:transparent;
+	padding: 0px;
+	border:0px !important;
+	box-shadow:0 0 0 transparent;
+}
 h3 a{
 	color: #FA418B;
 	text-transform: capitalize;
@@ -127,6 +143,37 @@ table tr:nth-child(odd) td{
 table tr td{
 		padding:30px;
 }
+.tap{
+	width: 50%;
+	box-sizing: border-box;
+	height:400px;
+	padding:10px;
+	float: left;
+
+}
+.tap .meter {
+	width:100%;
+	height:100%;
+	background: whitesmoke;
+	position: relative;
+}
+.tap .meter .measure {
+	position:absolute;
+	bottom: 0;
+	width: 100%;
+	height: 0%;
+	background-color: #FA418B;
+}
+.tap .volume {
+	position:absolute;
+	top: 50%;
+	width:100%;
+	margin-top:-20px;
+	font-weight: bold;
+	text-align:center;
+	font-size:28px;
+	z-index:9000;
+}
 </style>
 <script type="text/javascript">
 	$(function(){
@@ -137,7 +184,7 @@ table tr td{
 		var url = '/api';
 		var csrfmiddlewaretoken = $('.csrf input').val();
 		var usertemplate = $('#usertemplate').html()
-		// var usertemplate = $('#usertemplate').html()
+		var taptemplate = $('#taptemplate').html()
 
 
 
@@ -147,11 +194,16 @@ table tr td{
 			'data': postKey,
 			'type': 'GET',
 		});
+		var taps = $.ajax({
+			'url': url + '/taps/',
+			'data': postKey,
+			'type': 'GET',
+		});
+
 		var handleUsers = function (data) {
 			data.users = data.objects;
 			drinksArray = [];
 			$.each( data.users, function(i){
-				console.log(i, this.username)
 				var t = this;
 				drinksArray[i] = $.ajax({
 						'url': url + '/users/' + t.username + '/drinks',
@@ -162,28 +214,24 @@ table tr td{
 			});
 
 			var moarUserData = function() {
-				
+
 				$.each( arguments, function (i) {
 					data.users[i].drinks = this[0].objects;
 					data.users[i].volume_ml = 0;
 					$.each( this[0].objects, function() {
-						console.log(this.volume_ml);
 						data.users[i].volume_ml += parseFloat(this.volume_ml.toFixed(1));
 					});
 				});
-				console.log(data)
 				$('.users').html( Mustache.to_html( usertemplate, data ) )
 			}
 
 			$.when.apply($, drinksArray ).then( moarUserData );
 
-			
-			$('.beer-me-asshole').on('click', function(e) {
+
+			$('body').on('click', '.beer-me-asshole', function(e) {
 				e.preventDefault();
 				var userUrl = $(this).attr('href');
 				var data = postKey;
-
-				// data.expires_time = Date.now() + 5000000;
 
 				data.username = $(this).data('username');
 
@@ -197,12 +245,22 @@ table tr td{
 						}
 					});
 			});
-
 		}
-		
-		
+		var handleTaps = function (data) {
+			data.taps = data.objects;
+			console.log('taps', data);
+			$.each(data.objects, function(i) {
+				if (this.current_keg != undefined){
+					this.current_keg.percent_full = this.current_keg.percent_full.toFixed(0) + '%';
+					
+				}
+			});
+			$('.taps').html( Mustache.to_html( taptemplate, data ) )
+			
+		}
 		$.when( users ).then( handleUsers );
-		
+		$.when( taps ).then( handleTaps );
+
 	});
 </script>
 {% verbatim myblock %}
@@ -226,11 +284,27 @@ table tr td{
 			</tr>
 		{{/users}}
 	</script>
+	<script id="taptemplate" type="text/mustache">
+		{{#taps}}
+			<div class="tap">
+				<span class="tap-name"><h3>{{ name }}</h3></span>
+				<div class="meter">
+
+				<span class="volume">{{ current_keg.percent_full }}</span>
+					<div class="measure" style="height:{{ current_keg.percent_full }}%"></div>
+				</div>
+			</div>
+		{{/taps}}
+	</script>
 {% endverbatim myblock %}
 
 <span class="csrf" style="display:none">{% csrf_token %}</span>
+<div class="drinkers">
+	<table class="users" align="center"></table>
+</div>
+<div class="taps">
+</div>
 
-<table class="users" align="center"></table>
 
 
 {% endblock %}
