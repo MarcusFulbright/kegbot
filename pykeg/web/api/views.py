@@ -387,10 +387,16 @@ def _tap_detail_post(request, tap):
     duration = 0
   b = backend.KegbotBackend(site=request.kbsite)
   try:
+    if request.user.is_authenticated():
+	user = request.user
+      elif:
+	user = current_user.objects_get():
+      else:
+	user = models.default_user
     res = b.RecordDrink(tap_name=tap.meter_name,
       ticks=cd['ticks'],
       volume_ml=cd.get('volume_ml'),
-      username=cd.get('username'),
+      username= user,
       pour_time=pour_time,
       duration=duration,
       shout=cd.get('shout'),
@@ -489,3 +495,9 @@ def debug_log(request):
   client.send()
   return {'log_id': ident}
 
+def assign_current_user(request):
+  form  = forms.CurentUserForm(request.POST)
+  if not form.isvalid():
+    raise kbapi.BadRequestError(_form_errors(form))
+  username = form.cleaned_data['username']
+  expires_at = form.cleaned_data['expires_at']
