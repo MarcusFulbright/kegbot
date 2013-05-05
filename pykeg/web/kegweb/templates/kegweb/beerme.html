@@ -252,7 +252,9 @@ table tr td{
 			$.each(data.objects, function(i) {
 				if (this.current_keg != undefined){
 					this.current_keg.percent_full = this.current_keg.percent_full.toFixed(0) + '%';
-					
+					this.notactive = false;
+				}else {
+					this.notactive = true;
 				}
 			});
 			$('.taps').html( Mustache.to_html( taptemplate, data ) )
@@ -287,7 +289,7 @@ table tr td{
 	<script id="taptemplate" type="text/mustache">
 		{{#taps}}
 			<div class="tap">
-				<span class="tap-name"><h3>{{ name }}</h3></span>
+				<span class="tap-name"><h3>{{ name }} {{#notactive}}(Inactive){{/notactive}}</h3></span>
 				<div class="meter">
 
 				<span class="volume">{{ current_keg.percent_full }}</span>
