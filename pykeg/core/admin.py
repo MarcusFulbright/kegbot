@@ -139,3 +139,6 @@ class BeerTypeAdmin(admin.ModelAdmin):
   )
 
 admin.site.register(models.BeerType, BeerTypeAdmin)
+
+class CurrentUser(admin.ModelAdmin):
+  list_display = ('username')

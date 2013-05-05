@@ -60,6 +60,7 @@ def ToProto(obj, full=False):
   elif kind in _CONVERSION_MAP:
     return _CONVERSION_MAP[kind](obj, full)
   else:
+    print _CONVERSION_MAP
     raise ValueError, "Unknown object type: %s" % kind
 
 def ToDict(obj, full=False):

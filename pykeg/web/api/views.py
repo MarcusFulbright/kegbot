@@ -498,8 +498,8 @@ def debug_log(request):
 
 def assign_current_user(request):
   form  = forms.CurrentUserForm(request.POST)
+  b = backend.KegbotBackend(site=request.kbsite)
   if not form.is_valid():
     raise kbapi.BadRequestError(_form_errors(form))
   username = form.cleaned_data['username']
-  expires_at = form.cleaned_data['expires_at']
-  return {'result': 'ok'}
+  return b.SetCurrentUser(username)

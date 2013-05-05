@@ -28,6 +28,7 @@ from django.utils import timezone
 from . import kb_common
 from . import models
 from . import time_series
+from pykeg.core import models
 
 if settings.HAVE_CELERY:
   from pykeg.web import tasks
@@ -231,3 +232,7 @@ class KegbotBackend:
     except models.AuthenticationToken.DoesNotExist:
       raise NoTokenError
 
+  def SetCurrentUser(self, username):
+    current_user = models.CurrentUser.objects.create(username=username)
+    current_user.save()
+    return current_user
