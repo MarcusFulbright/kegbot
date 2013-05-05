@@ -388,10 +388,11 @@ def _tap_detail_post(request, tap):
   b = backend.KegbotBackend(site=request.kbsite)
   try:
     if request.user.is_authenticated():
-	user = request.user
-      elif:
-	user = current_user.objects_get():
-      else:
+       user = request.user
+    else:
+      try:
+	user = current_user.objects_get()
+      except:
 	user = models.default_user
     res = b.RecordDrink(tap_name=tap.meter_name,
       ticks=cd['ticks'],
