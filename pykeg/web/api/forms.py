@@ -70,6 +70,6 @@ class RegisterForm(forms.Form):
 class AssignTokenForm(forms.Form):
   username = forms.RegexField(max_length=30, regex=r"^[\w-]+$")
 
-class CurrnetUserForm(forms.Form):
+class CurrentUserForm(forms.Form):
   username = forms.RegexField(max_length=30, regex=r"^[/w-]+$")
   expires_at = forms.IntegerField()

@@ -496,9 +496,10 @@ def debug_log(request):
   client.send()
   return {'log_id': ident}
 
-def assign_curent_user(request):
-  form  = forms.CurentUserForm(request.POST)
-  if not form.isvalid():
+def assign_current_user(request):
+  form  = forms.CurrentUserForm(request.POST)
+  if not form.is_valid():
     raise kbapi.BadRequestError(_form_errors(form))
   username = form.cleaned_data['username']
   expires_at = form.cleaned_data['expires_at']
+  return {'result': 'ok'}
