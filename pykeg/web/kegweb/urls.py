@@ -6,9 +6,11 @@ from . import views
 urlpatterns = patterns('pykeg.web.kegweb.views',
       ### main page
       url(r'^$', 'index', name='kb-home'),
+      # url(r'^$', 'beerme', name='kb-beerme'),
 
       ### stats
       url(r'^stats/$', 'system_stats', name='kb-stats'),
+      url(r'^beerme', views.beerme , name='kb-beerme'),
 
       ### kegs
       url(r'^kegs/$', views.KegListView.as_view(), name='kb-kegs'),

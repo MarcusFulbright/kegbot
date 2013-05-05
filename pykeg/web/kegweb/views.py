@@ -70,6 +70,35 @@ def index(request):
 
   return render_to_response('index.html', context_instance=context)
 
+# from django.template import loader
+# register = template.create_template_register()
+# @register.simple_tag
+# def include_raw(path):
+#   return loader.find_template(path)[0]
+
+@cache_page(30)
+def beerme(request):
+  context = RequestContext(request)
+
+  # context['taps'] = request.kbsite.taps.all()
+
+  # events = request.kbsite.events.all()[:10]
+  # context['initial_events'] = kbjson.dumps([protolib.ToDict(e, full=True) for e in events],
+  #     indent=None)
+
+  # sessions = request.kbsite.sessions.all().order_by('-id')[:10]
+  # context['sessions'] = sessions
+  # context['initial_sessions'] = kbjson.dumps([protolib.ToDict(s, full=True) for s in sessions],
+  #     indent=None)
+
+  # taps = request.kbsite.taps.filter(current_keg__isnull=False)
+  # context['initial_taps'] = kbjson.dumps([protolib.ToDict(t, full=True) for t in taps], indent=None)
+
+  # context['have_events'] = len(events) > 0
+  # context['have_taps'] = len(taps) > 0
+
+  return render_to_response('kegweb/beerme.html', context_instance=context)
+
 @cache_page(30)
 def system_stats(request):
   stats = request.kbsite.GetStats()
