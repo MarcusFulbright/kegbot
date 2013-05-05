@@ -61,7 +61,7 @@ urlpatterns = patterns('pykeg.web.api.views',
     url(r'^users/(?P<username>[\w@.+-_]+)/stats/?$', 'get_user_stats'),
     url(r'^users/(?P<username>[\w@.+-_]+)/?$', 'get_user'),
     url(r'^stats/?$', 'get_system_stats'),
-    url(r'^current_user/', 'assign_current_user'),
+    url(r'^curent_user/', 'assign_curent_user'),
 
     url(r'^get-api-key/?$', 'get_api_key'),
 
