@@ -32,10 +32,11 @@
 				data.time = Date.now();
 
 				data.username = $(this).data('username');
+				data.csrfmiddlewaretoken = $('.csrf input').val();
 
 					setCurrentUser = $.ajax({
 						'url': url + '/current_user/',
-						'data': postKey,
+						'data': data,
 						'type': 'POST',
 						success: function(data) {
 							console.log('data', data)
@@ -64,7 +65,7 @@
 	</script>
 {% endverbatim myblock %}
 
-<!-- <span class="csrf" style="display:none">{% csrf_token %}</span> -->
+<span class="csrf" style="display:none">{% csrf_token %}</span>
 
 <h1>Beeeeer Meeee</h1>
 <table class="users"></table>
