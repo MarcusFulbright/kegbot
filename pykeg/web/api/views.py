@@ -391,9 +391,9 @@ def _tap_detail_post(request, tap):
        user = request.user
     else:
       try:
-	user = current_user.objects_get()
+        user = current_user.objects_get()
       except:
-	user = models.default_user
+        user = models.default_user
     res = b.RecordDrink(tap_name=tap.meter_name,
       ticks=cd['ticks'],
       volume_ml=cd.get('volume_ml'),
@@ -496,7 +496,7 @@ def debug_log(request):
   client.send()
   return {'log_id': ident}
 
-def assign_current_user(request):
+def assign_curent_user(request):
   form  = forms.CurentUserForm(request.POST)
   if not form.isvalid():
     raise kbapi.BadRequestError(_form_errors(form))
