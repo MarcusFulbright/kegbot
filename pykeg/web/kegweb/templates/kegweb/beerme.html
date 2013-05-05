@@ -116,7 +116,7 @@ h1 {
 				-24px 24px 0px #D4D4D4,
 				-25px 25px 0px #D4D4D4;
 }
-.drinkers:after, .taps:after{
+.drinkers:after, .taps:after, .meter:after, .tap:after, .volume:after{
 	content: '';
 	display:table;
 	clear:both;
@@ -156,6 +156,7 @@ table tr td{
 	height:100%;
 	background: whitesmoke;
 	position: relative;
+	clear:both;
 }
 .tap .meter .measure {
 	position:absolute;
@@ -246,22 +247,22 @@ table tr td{
 					});
 			});
 		}
-		var handleTaps = function (data) {
-			data.taps = data.objects;
-			console.log('taps', data);
-			$.each(data.objects, function(i) {
-				if (this.current_keg != undefined){
-					this.current_keg.percent_full = this.current_keg.percent_full.toFixed(0) + '%';
-					this.notactive = false;
-				}else {
-					this.notactive = true;
-				}
-			});
-			$('.taps').html( Mustache.to_html( taptemplate, data ) )
+		// var handleTaps = function (data) {
+		// 	data.taps = data.objects;
+		// 	console.log('taps', data);
+		// 	$.each(data.objects, function(i) {
+		// 		if (this.current_keg != undefined){
+		// 			this.current_keg.percent_full = this.current_keg.percent_full.toFixed(0) + '%';
+		// 			this.notactive = false;
+		// 		}else {
+		// 			this.notactive = true;
+		// 		}
+		// 	});
+		// 	$('.taps').html( Mustache.to_html( taptemplate, data ) )
 			
-		}
+		// }
 		$.when( users ).then( handleUsers );
-		$.when( taps ).then( handleTaps );
+		// $.when( taps ).then( handleTaps );
 
 	});
 </script>
@@ -286,6 +287,7 @@ table tr td{
 			</tr>
 		{{/users}}
 	</script>
+	<!--
 	<script id="taptemplate" type="text/mustache">
 		{{#taps}}
 			<div class="tap">
@@ -298,14 +300,15 @@ table tr td{
 			</div>
 		{{/taps}}
 	</script>
+-->
 {% endverbatim myblock %}
 
 <span class="csrf" style="display:none">{% csrf_token %}</span>
 <div class="drinkers">
 	<table class="users" align="center"></table>
 </div>
-<div class="taps">
-</div>
+<!-- <div class="taps">
+</div> -->
 
 
 
